@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+        version="2.0">
+
+    <entity class="entity.Album">
+        <table name="album" schema="music_albums_lab" catalog=""/>
+        <attributes>
+            <id name="id">
+                <column name="ID"/>
+            </id>
+            <basic name="name">
+                <column name="name"/>
+            </basic>
+            <basic name="artistId">
+                <column name="artist_ID" insertable="false" updatable="false"/>
+            </basic>
+            <basic name="releaseYear">
+                <column name="release_year"/>
+            </basic>
+            <many-to-one name="albumByArtistId" optional="true" target-entity="entity.Album">
+                <join-column name="artist_ID" referenced-column-name="ID"/>
+            </many-to-one>
+            <one-to-many name="albumsById" mapped-by="albumByArtistId" target-entity="entity.Album"/>
+            <one-to-many name="chartPositionsById" mapped-by="albumByAlbumId" target-entity="entity.ChartPosition"/>
+        </attributes>
+    </entity>
+    <entity class="entity.Artist">
+        <table name="artist" schema="music_albums_lab" catalog=""/>
+        <attributes>
+            <id name="id">
+                <column name="ID"/>
+            </id>
+            <basic name="name">
+                <column name="name"/>
+            </basic>
+            <basic name="country">
+                <column name="country"/>
+            </basic>
+        </attributes>
+    </entity>
+    <entity class="entity.Chart">
+        <table name="chart" schema="music_albums_lab" catalog=""/>
+        <attributes>
+            <id name="id">
+                <column name="ID"/>
+            </id>
+            <basic name="name">
+                <column name="name"/>
+            </basic>
+            <one-to-many name="chartPositionsById" mapped-by="chartByChartId" target-entity="entity.ChartPosition"/>
+        </attributes>
+    </entity>
+    <entity class="entity.ChartPosition">
+        <table name="chart_position" schema="music_albums_lab" catalog=""/>
+        <attributes>
+            <id name="id">
+                <column name="ID"/>
+            </id>
+            <basic name="chartId">
+                <column name="chart_ID" insertable="false" updatable="false"/>
+            </basic>
+            <basic name="albumId">
+                <column name="album_ID" insertable="false" updatable="false"/>
+            </basic>
+            <basic name="position">
+                <column name="position"/>
+            </basic>
+            <many-to-one name="chartByChartId" optional="true" target-entity="entity.Chart">
+                <join-column name="chart_ID" referenced-column-name="ID"/>
+            </many-to-one>
+            <many-to-one name="albumByAlbumId" optional="true" target-entity="entity.Album">
+                <join-column name="album_ID" referenced-column-name="ID"/>
+            </many-to-one>
+        </attributes>
+    </entity>
+</entity-mappings>
